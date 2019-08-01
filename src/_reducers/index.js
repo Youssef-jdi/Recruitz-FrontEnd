@@ -7,6 +7,7 @@ import { save } from './saveQuiz-reducer';
 import { getUserQuiz } from './getUserQuiz-reducer';
 import { passQuiz } from './passQuiz-reducer';
 import { finishQuiz } from './finishQuiz-reducer';
+import { getAllCandidates } from './getCandidates-reducer';
 const rootReducer = combineReducers({
 	LoginRed: SignIn,
 	SignUpRed: registration,
@@ -15,7 +16,8 @@ const rootReducer = combineReducers({
 	saveQuizReducer: save,
 	getUserQuizReducer: getUserQuiz,
 	passQuizReducer: passQuiz,
-	finishQuizReducer : finishQuiz
+	finishQuizReducer : finishQuiz,
+	getAllCandidatesReducer : getAllCandidates
 });
 
 export default rootReducer;

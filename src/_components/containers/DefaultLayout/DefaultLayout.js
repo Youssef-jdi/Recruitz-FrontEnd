@@ -23,6 +23,7 @@ import SurveyCreator from '../../../views/SurveyCreator/SurveyCreator';
 import ListQuiz from '../../../views/ListQuiz/ListQuiz';
 import Auth from '../../../_utils/Auth';
 import QuizPass from '../../../views/PassQuiz/QuizPass';
+import Candidates from '../../../views/Candidates/Candidate';
 const DefaultFooter = React.lazy(() => import('./DefaultFooter'));
 const DefaultHeader = React.lazy(() => import('./DefaultHeader'));
 
@@ -66,6 +67,7 @@ class DefaultLayout extends Component {
 						<AppSidebarHeader />
 						<AppSidebarForm />
 						<Suspense>
+							{/** here pass different nav files */}
 							<AppSidebarNav navConfig={navigation} {...this.props} router={router} />
 						</Suspense>
 						<AppSidebarFooter />
@@ -88,6 +90,7 @@ class DefaultLayout extends Component {
 										component={ListQuiz}
 									/>
 									<Route path="/dashboard/Quiz/QuizPass" name="Quiz Pass Page" component={QuizPass} />
+									<Route path="/dashboard/Candidates" name="Candidates" component={Candidates} />
 								</Switch>
 							</Suspense>
 						</Container>

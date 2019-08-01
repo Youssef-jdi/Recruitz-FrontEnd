@@ -27,9 +27,16 @@ export default {
           name : 'Pass Quiz',
           url : '/dashboard/Quiz/QuizPass',
           icon : 'icon-calculator'
-        }
+        },
+        
         
       ] 
+    },
+    {
+      name: 'Candidates',
+      url: '/dashboard/Candidates',
+      icon: 'icon-cursor', 
+      
     },
 
   ],

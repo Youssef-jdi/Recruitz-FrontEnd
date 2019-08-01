@@ -25,6 +25,9 @@ export const getUserQuiz = (user) => {
 		Axios
 		.get(server+'/quiz/MyQuizes/'+user.id)
 		.then(res => {
+			res.data.quizes.forEach(element => {
+				typeof	element.title === "undefined" ? element.title = "untitled" : element.title = element.title 
+			});
 			dispatch(getAllQuizesSuccess(res.data))
 			console.log('response getting quizes ',res)
 		})

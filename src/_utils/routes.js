@@ -3,6 +3,7 @@ import Register from '../views/Register/Register'
 import SurveyCreator from '../views/SurveyCreator/SurveyCreator';
 import Survey from '../views/Survey/Survey';
 import QuizPass from '../views/PassQuiz/QuizPass';
+import Candidates from '../views/Candidates/Candidate';
 
 const Dashboard = React.lazy(() => import('../_components/containers/DefaultLayout'));
 
@@ -33,6 +34,11 @@ const routes = [
     path : '/dashboard/Quiz/QuizPass',
     name : 'Quiz Pass',
     component : () => <QuizPass/>,
+  },
+  {
+    path : '/dashboard/Candidate',
+    name : 'Candidate',
+    component : () => <Candidates/>,
   }
   
 ];

@@ -18,21 +18,19 @@ export const register = (user) => {
 	};
 };
 
-
-
-
 export const login = (user) => {
 	return (dispatch) => {
+		console.log('user login ', user);
 		dispatch(loginPending());
 		Axios.post(server + '/user/login', user)
 			.then((res) => {
-				console.log('res ',res.data)
+				console.log('user from ws ', res.data.user);
 				dispatch(loginSuccess(res.data));
 				Auth.authenticateUser(res.data.token, res.data.user);
 			})
 			.catch((err) => {
-				dispatch(loginFailure(err.response.data.message));
-				console.log('error login ' + err);
+					dispatch(loginFailure(err));
+				    console.log('error login ' + err);
 			});
 	};
 };
@@ -66,6 +64,19 @@ export const updatePassword = (user) => {
 	};
 };
 
+export const getCandidates = () => {
+	return (dispatch) => {
+		dispatch(GetCandidatesPending());
+		Axios.get(server + '/user/Candidates')
+			.then((res) => {
+				dispatch(GetCandidatesSuccess(res.data));
+			})
+			.catch((err) => {
+				dispatch(GetCandidatesFailure(err.data));
+			});
+	};
+};
+
 /*actions creators */
 
 const registrationPending = () => ({
@@ -81,8 +92,6 @@ const registrationFailure = (data) => ({
 	type: userConstants.REGISTER_FAILURE,
 	error: data
 });
-
-
 
 const loginPending = () => ({
 	type: userConstants.LOGIN_REQUEST
@@ -117,5 +126,17 @@ const UpdatePasswordSuccess = (data) => ({
 });
 const UpdatePasswordFailure = (data) => ({
 	type: userConstants.UPDATE_FAILURE,
+	error: data
+});
+
+const GetCandidatesPending = () => ({
+	type: userConstants.GET_CANDIDATES_PENDING
+});
+const GetCandidatesSuccess = (data) => ({
+	type: userConstants.GET_CANDIDATES_SUCCESS,
+	payload: data
+});
+const GetCandidatesFailure = (data) => ({
+	type: userConstants.GET_CANDIDATES_FAILURE,
 	error: data
 });

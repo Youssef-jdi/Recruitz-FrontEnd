@@ -9,7 +9,11 @@ import {
 	PaginationItem,
 	PaginationLink,
 	Row,
-	Table
+	Table,
+	Input,
+	InputGroup,
+	InputGroupAddon,
+	InputGroupText
 } from 'reactstrap';
 
 import { getUserQuiz } from '../../_actions';
@@ -18,9 +22,14 @@ import Auth from '../../_utils/Auth';
 import ListQuizRow from './ListQuizRow';
 
 class ListQuiz extends Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			search: ''
+		};
+	}
 	componentDidMount() {
 		this.getQuizes();
-		console.log('component did mount');
 	}
 
 	getQuizes = () => {
@@ -28,18 +37,20 @@ class ListQuiz extends Component {
 		console.log('user from Auth ', user);
 		this.props.getUserQuiz(user);
 	};
-	tabRow() {
-		return this.props.quizes.map((quiz) => {
-			return <ListQuizRow quiz={quiz} key={quiz._id} />;
-		});
-	}
+
+	Search = (e) => {
+		this.setState({ search: e.target.value });
+	};
 
 	render() {
-		this.props.success
-			? this.props.quizes.forEach((element) => {
-					console.log('element ', element);
-				})
-			: console.log('not working');
+		let filtredList = this.props.quizes.filter((quiz) =>{
+			return quiz.title.indexOf(this.state.search) !== -1
+		})
+		// this.props.success
+		// 	? this.props.quizes.forEach((element) => {
+		// 			console.log('element ', element);
+		// 		})
+		// 	: console.log('not working');
 		return (
 			<div className="animated fadeIn">
 				<Row>
@@ -49,21 +60,37 @@ class ListQuiz extends Component {
 								<i className="fa fa-align-justify" /> My Quizes
 							</CardHeader>
 							<CardBody>
-								<Table  bordered striped responsive size="sm"> {/* hover */}
+								{/* <Row><Col><Input onChange={this.Search} placeholder="Search by title"></Input></Col></Row> */}
+								<InputGroup className="mb-4">
+									<InputGroupAddon addonType="prepend">
+										<InputGroupText>
+											<i className="cui-magnifying-glass icons font- d-block mt-1" />
+										</InputGroupText>
+									</InputGroupAddon>
+									<Input type="search" placeholder="Search by title" onChange={this.Search} />
+								</InputGroup>
+								<div style={{ height: '0px' , position : 'absolute' }} />
+								<Table bordered striped responsive size="sm">
+								
+									{/* hover */}
 									<thead>
 										<tr>
 											<th>Title</th>
 											<th>Date registered</th>
-											<th>Role</th>
-											<th>Status</th>
+											<th>Action</th>
 										</tr>
 									</thead>
 									<tbody>
 										{/** Row */}
-										{this.tabRow()}
+										{/* {this.tabRow()} */}
+										{filtredList.map((quiz) => {
+											return (
+												<ListQuizRow quiz={quiz} key={quiz._id} search={this.state.search} />
+											);
+										})}
 									</tbody>
 								</Table>
-								<nav>
+								{/* <nav>
 									<Pagination>
 										<PaginationItem>
 											<PaginationLink previous tag="button">
@@ -88,7 +115,7 @@ class ListQuiz extends Component {
 											</PaginationLink>
 										</PaginationItem>
 									</Pagination>
-								</nav>
+								</nav> */}
 							</CardBody>
 						</Card>
 					</Col>
