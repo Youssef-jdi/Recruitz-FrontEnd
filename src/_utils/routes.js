@@ -2,6 +2,7 @@ import React from 'react';
 import Register from '../views/Register/Register'
 import SurveyCreator from '../views/SurveyCreator/SurveyCreator';
 import Survey from '../views/Survey/Survey';
+import QuizPass from '../views/PassQuiz/QuizPass';
 
 const Dashboard = React.lazy(() => import('../_components/containers/DefaultLayout'));
 
@@ -28,6 +29,11 @@ const routes = [
     name: 'Quiz', 
     component: () =><Survey/>
   },
+  {
+    path : '/dashboard/Quiz/QuizPass',
+    name : 'Quiz Pass',
+    component : () => <QuizPass/>,
+  }
   
 ];
 

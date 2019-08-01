@@ -27,7 +27,15 @@ import { Button, Card, CardBody, Form, Input, InputGroup, InputGroupAddon, Input
 import customStyles from './custom-styling.css';
 import { register } from '../../_actions';
 
-SurveyJSCreator.StylesManager.applyTheme('default');
+// SurveyJSCreator.StylesManager.applyTheme("bootstrap");
+var defaultThemeColorsEditor = SurveyJSCreator.StylesManager.ThemeColors["default"];
+defaultThemeColorsEditor["$primary-color"] = "#20a8d8";
+defaultThemeColorsEditor["$secondary-color"] = "#20a8d8";
+defaultThemeColorsEditor["$primary-hover-color"] = "#20a8d8";
+defaultThemeColorsEditor["$primary-text-color"] = "#20a8d8";
+defaultThemeColorsEditor["$selection-border-color"] = "#20a8d8";
+SurveyJSCreator.StylesManager.applyTheme("bootstrap");
+
 
 widgets.icheck(SurveyKo, $);
 widgets.select2(SurveyKo, $);
@@ -100,7 +108,8 @@ class SurveyCreator extends Component {
 			showJSONEditorTab: false,
 			showTranslationTab: true,
 			showDefaultLanguageInTestSurveyTab: false,
-			showInvisibleElementsInTestSurveyTab: false
+			showInvisibleElementsInTestSurveyTab: false,
+			designerHeight: "700px"
 		};
 		this.surveyCreator = new SurveyJSCreator.SurveyCreator('surveyCreatorContainer', options);
 		this.surveyCreator.saveSurveyFunc = this.saveMySurvey;
@@ -184,6 +193,7 @@ class SurveyCreator extends Component {
 
 	saveMySurvey = () => {
 		this.onOpenModal();
+		console.log(this.surveyCreator.text)
 		this.props.save(JSON.parse(this.surveyCreator.text), this.state.user);
 	};
 }

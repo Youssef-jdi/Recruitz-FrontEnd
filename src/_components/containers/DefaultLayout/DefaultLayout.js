@@ -22,6 +22,7 @@ import Register from '../../../views/Register/Register';
 import SurveyCreator from '../../../views/SurveyCreator/SurveyCreator';
 import ListQuiz from '../../../views/ListQuiz/ListQuiz';
 import Auth from '../../../_utils/Auth';
+import QuizPass from '../../../views/PassQuiz/QuizPass';
 const DefaultFooter = React.lazy(() => import('./DefaultFooter'));
 const DefaultHeader = React.lazy(() => import('./DefaultHeader'));
 
@@ -48,7 +49,7 @@ class DefaultLayout extends Component {
 		// 	navigation.items[1].children[0].attributes = {disabled : true}
 		// 	navigation.items[1].children[1].attributes = {disabled : true}
 		// }
-	}
+	};
 
 	render() {
 		return (
@@ -86,6 +87,7 @@ class DefaultLayout extends Component {
 										name="QuizList Page"
 										component={ListQuiz}
 									/>
+									<Route path="/dashboard/Quiz/QuizPass" name="Quiz Pass Page" component={QuizPass} />
 								</Switch>
 							</Suspense>
 						</Container>

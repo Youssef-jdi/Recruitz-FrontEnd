@@ -36,6 +36,38 @@ export const getUserQuiz = (user) => {
 }
 
 
+export const getQuizToPass = (user) => {
+	return (dispatch) => {
+		console.log('user from Auth ',user)
+		dispatch(getQuizToPassPending())
+		Axios
+		.get(server+'/quiz/pass/'+user.id)
+		.then(res => {
+			dispatch(getQuizToPassSuccess(res.data))
+		})
+		.catch(err => {
+			dispatch(getQuizToPassFailure(err.data))
+		})
+	}
+}
+
+
+export const finishQuiz = (user,result) => {
+	return(dispatch) => {
+		dispatch(finishQuizPending())
+		Axios
+		.post(server+'/quiz/finishQuiz',{user,result})
+		.then(res => {
+			dispatch(finishQuizSuccess(res.data))
+		})
+		.catch(err => {
+			dispatch(finishQuizFailure(err.data))
+		})
+	}
+}
+
+
+
 
 const savePending = () => ({
 	type: quizConstants.SAVE_REQUEST
@@ -63,5 +95,34 @@ const getAllQuizesSuccess = (data) => ({
 
 const getAllQuizesFailure = (data) => ({
 	type: quizConstants.USER_QUIZES_FAILURE,
+	error: data
+});
+
+const getQuizToPassPending = () => ({
+	type: quizConstants.QUIZ_PASS_REQUEST	
+});
+
+const getQuizToPassSuccess = (data) => ({
+	type: quizConstants.QUIZ_PASS_SUCCESS,
+	payload: data
+});
+
+const getQuizToPassFailure = (data) => ({
+	type: quizConstants.QUIZ_PASS_FAILURE,
+	error: data
+});
+
+
+const finishQuizPending = () => ({
+	type: quizConstants.FINISH_QUIZ_REQUEST	
+});
+
+const finishQuizSuccess = (data) => ({
+	type: quizConstants.FINISH_QUIZ_SUCCESS,
+	payload: data
+});
+
+const finishQuizFailure = (data) => ({
+	type: quizConstants.FINISH_QUIZ_FAILURE,
 	error: data
 });
