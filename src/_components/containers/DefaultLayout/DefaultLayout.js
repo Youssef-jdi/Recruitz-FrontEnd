@@ -24,6 +24,8 @@ import ListQuiz from '../../../views/ListQuiz/ListQuiz';
 import Auth from '../../../_utils/Auth';
 import QuizPass from '../../../views/PassQuiz/QuizPass';
 import Candidates from '../../../views/Candidates/Candidate';
+import ResultQuiz from '../../../views/ResultQuiz/ResultQuiz';
+import AllQuizes from '../../../views/AllQuiz/AllQuizes';
 const DefaultFooter = React.lazy(() => import('./DefaultFooter'));
 const DefaultHeader = React.lazy(() => import('./DefaultHeader'));
 
@@ -33,6 +35,10 @@ class DefaultLayout extends Component {
 	signOut(e) {
 		e.preventDefault();
 	}
+
+	hideAppSideBarForCandidates = () => {
+		return Auth.getUser().role === 'Candidate' ? null : null;
+	};
 
 	checkUser = () => {
 		// const user = Auth.getUser();
@@ -56,6 +62,7 @@ class DefaultLayout extends Component {
 		return (
 			<div className="app">
 				{this.checkUser()}
+
 				<AppHeader fixed>
 					<Suspense fallback={this.loading()}>
 						<DefaultHeader onLogout={(e) => this.signOut(e)} />
@@ -63,11 +70,13 @@ class DefaultLayout extends Component {
 				</AppHeader>
 				<div className="app-body">
 					{/** appside bar removed when user role is candidate */}
+					{/* {this.hideAppSideBarForCandidates()} */}
 					<AppSidebar fixed display="lg">
 						<AppSidebarHeader />
 						<AppSidebarForm />
 						<Suspense>
 							{/** here pass different nav files */}
+							{console.log('here2')}
 							<AppSidebarNav navConfig={navigation} {...this.props} router={router} />
 						</Suspense>
 						<AppSidebarFooter />
@@ -91,6 +100,8 @@ class DefaultLayout extends Component {
 									/>
 									<Route path="/dashboard/Quiz/QuizPass" name="Quiz Pass Page" component={QuizPass} />
 									<Route path="/dashboard/Candidates" name="Candidates" component={Candidates} />
+									<Route path="/dashboard/result" name="Result" component={ResultQuiz} />
+									<Route path="/dashboard/AllQuizes" name="All Quizes" component={AllQuizes} />
 								</Switch>
 							</Suspense>
 						</Container>

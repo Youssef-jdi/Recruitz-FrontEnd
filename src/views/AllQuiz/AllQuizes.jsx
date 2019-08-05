@@ -11,10 +11,12 @@ import {
 	InputGroupAddon,
 	InputGroupText
 } from 'reactstrap';
-import { getCandidates } from '../../_actions';
+import { getAllQuizes } from '../../_actions';
+import { getUser } from '../../_actions';
 import { connect } from 'react-redux';
-import RowCandidate from './RowCandidate';
-class Candidates extends Component {
+import RowAllQuizes from './AllQuizesRow';
+import { AssignQuizToUser } from '../../_actions';
+class AllQuizes extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -22,14 +24,14 @@ class Candidates extends Component {
 		};
 	}
 	componentDidMount() {
-		this.props.getCandidates();
+		this.props.getAllQuizes();
 	}
 	Search = (e) => {
 		this.setState({ search: e.target.value });
 	};
 	render() {
-		let filtredList = this.props.candidates.filter((candidate) => {
-			return candidate.name.indexOf(this.state.search) !== -1;
+		let filtredList = this.props.quizes.filter((quiz) => {
+			return quiz.title.indexOf(this.state.search) !== -1;
 		});
 		return (
 			<div className="animated fadeIn">
@@ -47,29 +49,33 @@ class Candidates extends Component {
 											<i className="cui-magnifying-glass icons font- d-block mt-1" />
 										</InputGroupText>
 									</InputGroupAddon>
-									<Input type="search" placeholder="Search by name" onChange={this.Search} />
+									<Input type="search" placeholder="Search by title" onChange={this.Search} />
 								</InputGroup>
 								<div style={{ height: '0px', position: 'absolute' }} />
 								<Table bordered striped responsive size="sm">
 									{/* hover */}
 									<thead>
 										<tr>
-											<th>Name</th>
-											<th>Email</th>
-											<th>Status</th>
-											<th>Assign / View results</th>
+											<th>Title</th>
+											<th>Date</th>
+											<th>Made by</th>
+											<th>Select</th>
 										</tr>
 									</thead>
 									<tbody>
 										{/** Row */}
 										{/* {this.tabRow()} */}
-										{filtredList.map((candidate) => {
+										{filtredList.map((quiz) => {
+											//let user = this.props.getUser(quiz.madeBy)
 											return (
-												<RowCandidate
-													candidate={candidate}
-													key={candidate._id}
+												<RowAllQuizes
+													quiz={quiz}
+													key={quiz._id}
 													search={this.state.search}
 													history={this.props.history}
+													candidate={this.props.location.state.candidate}
+                                                    assign={this.props.AssignQuizToUser}
+                                                    success={this.props.successAssign}
 												/>
 											);
 										})}
@@ -85,12 +91,17 @@ class Candidates extends Component {
 }
 
 const mapStateToProps = (state) => ({
-	success: state.getAllCandidatesReducer.success,
-	candidates: state.getAllCandidatesReducer.candidates
+	success: state.getAllQuizesReducer.success,
+	quizes: state.getAllQuizesReducer.quizes,
+	successUser: state.getAdminReducer.success,
+	user: state.getAdminReducer.user,
+	successAssign: state.AssignQuizReducer.success
 });
 
 const mapDispatchToProps = {
-	getCandidates
+	getAllQuizes,
+	getUser,
+	AssignQuizToUser
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Candidates);
+export default connect(mapStateToProps, mapDispatchToProps)(AllQuizes);

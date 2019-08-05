@@ -53,6 +53,7 @@ class Login extends Component {
 		if(this.props.success && this.props.user.role === 'Candidate'){
 			//check if Candidate .resultQuiz is empty
 			return <Redirect to="/dashboard/Quiz/QuizPass" />
+			//return <div><h1>Hello world</h1></div>
 		}
 		else if (this.props.success && this.props.user.role !== 'Candidate'){
 			console.log('Admin or Super Admin')

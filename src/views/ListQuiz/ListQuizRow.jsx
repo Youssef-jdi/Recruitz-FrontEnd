@@ -11,13 +11,13 @@ const ListQuizRow = (props) => {
 			<td>{quiz.date ? <Moment format="D MMM YYYY">{date}</Moment> : 'not specified'}</td>
 			<td>
 				<Button>View</Button>
+				<Button style={{marginLeft: '20%'}} onClick={() => props.delete(quiz)}>
+					<i className="cui-trash icons font-xl d-block mt-1" />
+				</Button>
 			</td>
 		</tr>
 	);
 };
 
-// const sendInvite = () => {
-// 	console.log('i am clicked')
-// }
 
 export default ListQuizRow;

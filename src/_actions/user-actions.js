@@ -77,6 +77,20 @@ export const getCandidates = () => {
 	};
 };
 
+export const getUser = (id) => {
+	return (dispatch) => {
+		dispatch(getAdminPending())
+		Axios
+		.get('/getUser/'+id)
+		.then(res => {
+			dispatch(getAdminSuccess(res.data))
+		})
+		.catch(err => {
+			dispatch(getAdminFailure(err))
+		})
+	}
+}
+
 /*actions creators */
 
 const registrationPending = () => ({
@@ -138,5 +152,17 @@ const GetCandidatesSuccess = (data) => ({
 });
 const GetCandidatesFailure = (data) => ({
 	type: userConstants.GET_CANDIDATES_FAILURE,
+	error: data
+});
+
+const getAdminPending = () => ({
+	type: userConstants.GET_ADMIN_PENDING
+});
+const getAdminSuccess = (data) => ({
+	type: userConstants.GET_ADMIN_SUCCESS,
+	payload: data
+});
+const getAdminFailure = (data) => ({
+	type: userConstants.GET_ADMIN_FAILURE,
 	error: data
 });

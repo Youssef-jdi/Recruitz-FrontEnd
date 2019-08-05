@@ -17,6 +17,7 @@ import {
 } from 'reactstrap';
 
 import { getUserQuiz } from '../../_actions';
+import { deleteQuiz } from '../../_actions';
 import { connect } from 'react-redux';
 import Auth from '../../_utils/Auth';
 import ListQuizRow from './ListQuizRow';
@@ -43,17 +44,15 @@ class ListQuiz extends Component {
 	};
 
 	render() {
-		let filtredList = this.props.quizes.filter((quiz) =>{
-			return quiz.title.indexOf(this.state.search) !== -1
-		})
-		// this.props.success
-		// 	? this.props.quizes.forEach((element) => {
-		// 			console.log('element ', element);
-		// 		})
-		// 	: console.log('not working');
+		let filtredList = this.props.quizes.filter((quiz) => {
+			return quiz.title.indexOf(this.state.search) !== -1;
+		});
+
 		return (
 			<div className="animated fadeIn">
 				<Row>
+					{console.log(this.props.successDeleting)}
+
 					<Col>
 						<Card>
 							<CardHeader>
@@ -69,9 +68,8 @@ class ListQuiz extends Component {
 									</InputGroupAddon>
 									<Input type="search" placeholder="Search by title" onChange={this.Search} />
 								</InputGroup>
-								<div style={{ height: '0px' , position : 'absolute' }} />
+								<div style={{ height: '0px', position: 'absolute' }} />
 								<Table bordered striped responsive size="sm">
-								
 									{/* hover */}
 									<thead>
 										<tr>
@@ -85,37 +83,16 @@ class ListQuiz extends Component {
 										{/* {this.tabRow()} */}
 										{filtredList.map((quiz) => {
 											return (
-												<ListQuizRow quiz={quiz} key={quiz._id} search={this.state.search} />
+												<ListQuizRow
+													quiz={quiz}
+													key={quiz._id}
+													search={this.state.search}
+													delete={this.props.deleteQuiz}
+												/>
 											);
 										})}
 									</tbody>
 								</Table>
-								{/* <nav>
-									<Pagination>
-										<PaginationItem>
-											<PaginationLink previous tag="button">
-												Prev
-											</PaginationLink>
-										</PaginationItem>
-										<PaginationItem active>
-											<PaginationLink tag="button">1</PaginationLink>
-										</PaginationItem>
-										<PaginationItem>
-											<PaginationLink tag="button">2</PaginationLink>
-										</PaginationItem>
-										<PaginationItem>
-											<PaginationLink tag="button">3</PaginationLink>
-										</PaginationItem>
-										<PaginationItem>
-											<PaginationLink tag="button">4</PaginationLink>
-										</PaginationItem>
-										<PaginationItem>
-											<PaginationLink next tag="button">
-												Next
-											</PaginationLink>
-										</PaginationItem>
-									</Pagination>
-								</nav> */}
 							</CardBody>
 						</Card>
 					</Col>
@@ -127,11 +104,13 @@ class ListQuiz extends Component {
 
 const mapStateToProps = (state) => ({
 	success: state.getUserQuizReducer.success,
-	quizes: state.getUserQuizReducer.quizes
+	quizes: state.getUserQuizReducer.quizes,
+	successDeleting: state.deleteQuizReducer.success
 });
 
 const mapDispatchToProps = {
-	getUserQuiz
+	getUserQuiz,
+	deleteQuiz
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ListQuiz);

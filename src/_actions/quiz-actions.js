@@ -1,6 +1,7 @@
 import server from '../_utils/server';
 import { Axios } from '../_utils/Axios';
 import { quizConstants } from '../_constants';
+import { cpus } from 'os';
 
 export const save = (quiz, user) => {
 	return (dispatch) => {
@@ -69,6 +70,67 @@ export const finishQuiz = (user,result) => {
 	}
 }
 
+export const getResult = (user) => {
+	return (dispatch) => {
+		dispatch(getResultPending())
+		Axios
+		.get(server+'/quiz/result/'+user)
+		.then(res =>{
+			console.log(res.data)
+			dispatch(getResultSuccess(res.data))
+		})
+		.catch(err =>{
+			console.log(err)
+			dispatch(getResultFailure(err))
+		})
+	}
+}
+export const getAllQuizes = () => {
+	return (dispatch) => {
+		dispatch(getQuizesPending())
+		Axios
+		.get(server+'/quiz/AllQuizes')
+		.then(res=>{
+			res.data.quizes.forEach(element => {
+				typeof	element.title === "undefined" ? element.title = "untitled" : element.title = element.title 
+			});
+			console.log(res.data)
+			dispatch(getQuizesSuccess(res.data))
+		})
+		.catch(err => {
+			dispatch(getQuizesFailure(err.data))
+		})
+	}
+}
+
+export const AssignQuizToUser = (quiz,user) => {
+	return (dispatch) => {
+		dispatch(AssignQuizToUserPending())
+		Axios
+		.post(server+'/quiz/assign',{user,quiz})
+		.then(res =>{
+			dispatch(AssignQuizToUserSuccess(res.data))
+		})
+		.catch(err =>{
+			dispatch(AssignQuizToUserFailure(err))
+		})
+	}
+}
+
+export const deleteQuiz = (quiz) => {
+	return (dispatch) => {
+		dispatch(deleteQuizPending())
+		Axios
+		.post(server+'/quiz/delete',{quiz})
+		.then(res =>{
+			dispatch(deleteQuizSuccess(res.data))
+		})
+		.catch(err => {
+			dispatch(deleteQuizFailure(err))
+		})
+	}
+}
+
 
 
 
@@ -127,5 +189,61 @@ const finishQuizSuccess = (data) => ({
 
 const finishQuizFailure = (data) => ({
 	type: quizConstants.FINISH_QUIZ_FAILURE,
+	error: data
+});
+
+const getResultPending = () => ({
+	type: quizConstants.GET_RESULT_REQUEST	
+});
+
+const getResultSuccess = (data) => ({
+	type: quizConstants.GET_RESULT_SUCCESS,
+	payload: data
+});
+
+const getResultFailure = (data) => ({
+	type: quizConstants.GET_RESULT_FAILURE,
+	error: data
+});
+
+const getQuizesPending = () => ({
+	type: quizConstants.GET_ALL_QUIZES_REQUEST
+});
+
+const getQuizesSuccess = (data) => ({
+	type: quizConstants.GET_ALL_QUIZES_SUCCESS,
+	payload: data
+});
+
+const getQuizesFailure = (data) => ({
+	type: quizConstants.GET_ALL_QUIZES_FAILURE,
+	error: data
+});
+
+const AssignQuizToUserPending = () => ({
+	type: quizConstants.ASSIGN_QUIZTOUSER_REQUEST
+});
+
+const AssignQuizToUserSuccess = (data) => ({
+	type: quizConstants.ASSIGN_QUIZTOUSER_SUCCESS,
+	payload: data
+});
+
+const AssignQuizToUserFailure = (data) => ({
+	type: quizConstants.ASSIGN_QUIZTOUSER_FAILURE,
+	error: data
+});
+
+const deleteQuizPending = () => ({
+	type: quizConstants.DELETE_QUIZ_REQUEST
+});
+
+const deleteQuizSuccess = (data) => ({
+	type: quizConstants.DELETE_QUIZ_SUCCESS,
+	payload: data
+});
+
+const deleteQuizFailure = (data) => ({
+	type: quizConstants.DELETE_QUIZ_FAILURE,
 	error: data
 });

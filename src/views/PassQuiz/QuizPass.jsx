@@ -9,16 +9,13 @@ import { Redirect } from 'react-router-dom';
 class QuizPass extends Component {
 	loading = () => <div className="animated fadeIn pt-1 text-center">Loading...</div>;
 	componentDidMount() {
-		console.log('user s ',Auth.getUser())
+		console.log('user s didmount',Auth.getUser())
         this.props.getQuizToPass(Auth.getUser());
         
     }
     
 	render() {
-		
-        console.error(this.props.quiz);
-        console.error('success getting quiz ',this.props.success);
-        console.error('success finish quiz ',this.props.successFinish);
+		console.log('user s render ',Auth.getUser())
 		let model = new Survey.Model(this.props.quiz);
 		return (
 			<div>

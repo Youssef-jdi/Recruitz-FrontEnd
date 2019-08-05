@@ -4,11 +4,13 @@ import SurveyCreator from '../views/SurveyCreator/SurveyCreator';
 import Survey from '../views/Survey/Survey';
 import QuizPass from '../views/PassQuiz/QuizPass';
 import Candidates from '../views/Candidates/Candidate';
+import ResultQuiz from '../views/ResultQuiz/ResultQuiz';
+import AllQuizes from '../views/AllQuiz/AllQuizes';
 
 const Dashboard = React.lazy(() => import('../_components/containers/DefaultLayout'));
 
 
-// https://github.com/ReactTraining/react-router/tree/master/packages/react-router-config
+
 const routes = [
   { 
     path: '/', 
@@ -39,6 +41,16 @@ const routes = [
     path : '/dashboard/Candidate',
     name : 'Candidate',
     component : () => <Candidates/>,
+  },
+  {
+    path : '/dashboard/result',
+    name : 'Candidate result',
+    component : () => <ResultQuiz/>,
+  },
+  {
+    path : '/dashboard/AllQuizes',
+    name : 'All Quizes',
+    component : () => <AllQuizes/>,
   }
   
 ];
