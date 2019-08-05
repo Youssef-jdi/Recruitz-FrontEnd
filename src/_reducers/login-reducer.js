@@ -22,7 +22,7 @@ export const SignIn = (state = INITIAL_STATE, action) => {
 				success: true
 			};
 		case userConstants.LOGIN_FAILURE:
-			return { ...state, loading: false, message: action.error, messageColor: 'red', success: false };
+			return { ...state, loading: false, message: action.error.message, messageColor: 'red', success: false };
 		default:
 			return state;
 	}

@@ -9,24 +9,41 @@ import { Redirect } from 'react-router-dom';
 class QuizPass extends Component {
 	loading = () => <div className="animated fadeIn pt-1 text-center">Loading...</div>;
 	componentDidMount() {
-		console.log('user s didmount',Auth.getUser())
-        this.props.getQuizToPass(Auth.getUser());
-        
-    }
-    
+		this.props.getQuizToPass(Auth.getUser());
+	}
+	// componentWillMount(){
+	// 	// this.props.getQuizToPass(Auth.getUser());
+	// }
+
 	render() {
-		console.log('user s render ',Auth.getUser())
+		//this.props.getQuizToPass(Auth.getUser());
+		console.error('success ', this.props.success);
 		let model = new Survey.Model(this.props.quiz);
-		return (
-			<div>
-				{!this.props.successFinish ? !this.props.success ? (
-					<div className="animated fadeIn pt-1 text-center">Loading...</div>
-				) : (
+		let render;
+		if (!this.props.successFinish) {
+			if (this.props.success === 2) {
+				render = <div className="animated fadeIn pt-1 text-center">Loading...</div>;
+			} else if (this.props.success === 1) {
+				render = (
 					<Survey.Survey model={model} onComplete={this.onComplete} onValueChanged={this.onValueChanged} />
-				) : (
-					<Redirect to="/" />
-				)}
-			</div>
+				);
+			} else {
+				render = <h1>You have no quiz</h1>;
+			}
+		} else if (this.props.successFinish) {
+			render = <Redirect to="/" />;
+		}
+		return (
+			// <div>
+			// 	{!this.props.successFinish ? !this.props.success ? (
+			// 		<div className="animated fadeIn pt-1 text-center">Loading...</div>
+			// 	) : (
+			// 		<Survey.Survey model={model} onComplete={this.onComplete} onValueChanged={this.onValueChanged} />
+			// 	) : (
+			// 		<Redirect to="/" />
+			// 	)}
+			// </div>
+			<div>{render}</div>
 		);
 	}
 

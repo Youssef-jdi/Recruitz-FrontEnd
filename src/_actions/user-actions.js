@@ -2,6 +2,7 @@ import { userConstants } from '../_constants';
 import server from '../_utils/server';
 import Auth from '../_utils/Auth';
 import { Axios } from '../_utils/Axios';
+import { async } from 'q';
 
 export const register = (user) => {
 	return (dispatch) => {
@@ -25,12 +26,11 @@ export const login = (user) => {
 		Axios.post(server + '/user/login', user)
 			.then((res) => {
 				console.log('user from ws ', res.data.user);
-				dispatch(loginSuccess(res.data));
 				Auth.authenticateUser(res.data.token, res.data.user);
+				dispatch(loginSuccess(res.data));
 			})
 			.catch((err) => {
-					dispatch(loginFailure(err));
-				    console.log('error login ' + err);
+				dispatch(loginFailure(err.response.data));
 			});
 	};
 };
@@ -79,17 +79,16 @@ export const getCandidates = () => {
 
 export const getUser = (id) => {
 	return (dispatch) => {
-		dispatch(getAdminPending())
-		Axios
-		.get('/getUser/'+id)
-		.then(res => {
-			dispatch(getAdminSuccess(res.data))
-		})
-		.catch(err => {
-			dispatch(getAdminFailure(err))
-		})
-	}
-}
+		dispatch(getAdminPending());
+		Axios.get('/getUser/' + id)
+			.then((res) => {
+				dispatch(getAdminSuccess(res.data));
+			})
+			.catch((err) => {
+				dispatch(getAdminFailure(err));
+			});
+	};
+};
 
 /*actions creators */
 
