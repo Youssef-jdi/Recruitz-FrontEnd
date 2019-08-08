@@ -95,6 +95,20 @@ export const isQuizPassed = (user) => {
 	}
 }
 
+export const startQuiz = (user) => {
+	return(dispatch) => {
+		dispatch(startQuizPending())
+		Axios
+		.post(server+'/user/startQuiz' , user)
+		.then(res => {
+			dispatch(startQuizSuccess(res.data))
+		})
+		.catch(err => {
+			dispatch(startQuizFailure(err.response.data))
+		})
+	}
+}
+
 /*actions creators */
 
 const registrationPending = () => ({
@@ -168,5 +182,18 @@ const isQuizPassedSuccess = (data) => ({
 });
 const isQuizPassedFailure = (data) => ({
 	type: userConstants.ISQUIZ_PASSED_FAILURE,
+	error: data
+});
+
+
+const startQuizPending = () => ({
+	type: userConstants.START_QUIZ_PENDING
+});
+const startQuizSuccess = (data) => ({
+	type: userConstants.START_QUIZ_SUCCESS,
+	payload: data
+});
+const startQuizFailure = (data) => ({
+	type: userConstants.START_QUIZ_FAILURE,
 	error: data
 });
