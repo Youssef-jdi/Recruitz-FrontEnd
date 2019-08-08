@@ -13,6 +13,7 @@ import { getAllQuizes } from './getAllQuizes-reducer';
 import { getAdmin } from './getAdmin-reducer';
 import { AssignQuiz } from './AssignQuiz-reducer';
 import { deleteQuiz } from './deleteQuiz-reducer';
+import { isPassed } from './isQuizPassed-reducer'
 const rootReducer = combineReducers({
 	LoginRed: SignIn,
 	SignUpRed: registration,
@@ -27,8 +28,8 @@ const rootReducer = combineReducers({
 	getAllQuizesReducer : getAllQuizes,
 	getAdminReducer : getAdmin,
 	AssignQuizReducer : AssignQuiz,
-	deleteQuizReducer : deleteQuiz
-
+	deleteQuizReducer : deleteQuiz,
+	isPassedReducer : isPassed
 });
 
 export default rootReducer;

@@ -9,8 +9,8 @@ class ResultQuiz extends Component {
 
    
     componentDidMount(){
-        console.error('user from candidate list ',this.props.location.state.candidate)
-        this.props.getResult(this.props.location.state.candidate._id)
+        // console.error('user from candidate list ',this.props.location.state.candidate)
+       this.props.location.state ?  this.props.getResult(this.props.location.state.candidate._id) : console.log('')
     }
 
 

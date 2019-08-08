@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import * as Survey from 'survey-react';
-import { getQuizToPass } from '../../_actions';
-import { finishQuiz } from '../../_actions';
+import { finishQuiz, getQuizToPass, isQuizPassed } from '../../_actions';
 import { connect } from 'react-redux';
 import Auth from '../../_utils/Auth';
 import { Redirect } from 'react-router-dom';
@@ -9,30 +8,32 @@ import { Redirect } from 'react-router-dom';
 class QuizPass extends Component {
 	loading = () => <div className="animated fadeIn pt-1 text-center">Loading...</div>;
 	componentDidMount() {
-		this.props.getQuizToPass(Auth.getUser());
+	  Auth.getUser()  ?	this.props.isQuizPassed(Auth.getUser()) : console.log('')
+	 Auth.getUser() ?  this.props.getQuizToPass(Auth.getUser()) : console.log('')
 	}
-	// componentWillMount(){
-	// 	// this.props.getQuizToPass(Auth.getUser());
-	// }
 
 	render() {
 		//this.props.getQuizToPass(Auth.getUser());
-		console.error('success ', this.props.success);
 		let model = new Survey.Model(this.props.quiz);
 		let render;
-		if (!this.props.successFinish) {
-			if (this.props.success === 2) {
-				render = <div className="animated fadeIn pt-1 text-center">Loading...</div>;
-			} else if (this.props.success === 1) {
-				render = (
-					<Survey.Survey model={model} onComplete={this.onComplete} onValueChanged={this.onValueChanged} />
-				);
-			} else {
-				render = <h1>You have no quiz</h1>;
-			}
-		} else if (this.props.successFinish) {
-			render = <Redirect to="/" />;
+		if(this.props.isPassed){
+			render = <h1>You already passed the quiz </h1>
 		}
+		else if (this.props.successFinish){
+			render = <h1>You finished</h1>
+		}
+		else{
+			if(this.props.success === 2){
+				render = <div className="animated fadeIn pt-1 text-center">Loading...</div>
+			}
+			else if (this.props.success === 1){
+				render = <Survey.Survey model={model} onComplete={this.onComplete} onValueChanged={this.onValueChanged} />
+			}
+			else {
+				render = <h1>You have no quiz</h1>
+			}
+		}
+
 		return (
 			// <div>
 			// 	{!this.props.successFinish ? !this.props.success ? (
@@ -60,12 +61,14 @@ class QuizPass extends Component {
 const mapStateToProps = (state) => ({
 	success: state.passQuizReducer.success,
 	quiz: state.passQuizReducer.quiz,
-	successFinish: state.finishQuizReducer.success
+	successFinish: state.finishQuizReducer.success,
+	isPassed: state.isPassedReducer.isPassed
 });
 
 const mapDispatchToProps = {
 	getQuizToPass,
-	finishQuiz
+	finishQuiz,
+	isQuizPassed
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(QuizPass);

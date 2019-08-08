@@ -30,7 +30,7 @@ class ListQuiz extends Component {
 		};
 	}
 	componentDidMount() {
-		this.getQuizes();
+	   Auth.getUser() ?	this.getQuizes() : this.props.history.push('/')
 	}
 
 	getQuizes = () => {

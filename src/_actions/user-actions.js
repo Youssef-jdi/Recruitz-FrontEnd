@@ -77,18 +77,23 @@ export const getCandidates = () => {
 	};
 };
 
-export const getUser = (id) => {
-	return (dispatch) => {
-		dispatch(getAdminPending());
-		Axios.get('/getUser/' + id)
-			.then((res) => {
-				dispatch(getAdminSuccess(res.data));
-			})
-			.catch((err) => {
-				dispatch(getAdminFailure(err));
-			});
-	};
-};
+
+
+export const isQuizPassed = (user) => {
+	return(dispatch) => {
+		dispatch(isQuizPassedPending())
+		console.log('user ',user)
+		Axios
+		.get(server+'/user/isQuizPassed/'+user.id)
+		.then(res => {
+			dispatch(isQuizPassedSuccess(res.data))
+		})
+		.catch(err => {
+			console.error('erreur ',err)
+			dispatch(isQuizPassedFailure(err.response.data))
+		})
+	}
+}
 
 /*actions creators */
 
@@ -154,14 +159,14 @@ const GetCandidatesFailure = (data) => ({
 	error: data
 });
 
-const getAdminPending = () => ({
-	type: userConstants.GET_ADMIN_PENDING
+const isQuizPassedPending = () => ({
+	type: userConstants.ISQUIZ_PASSED_PENDING
 });
-const getAdminSuccess = (data) => ({
-	type: userConstants.GET_ADMIN_SUCCESS,
+const isQuizPassedSuccess = (data) => ({
+	type: userConstants.ISQUIZ_PASSED_SUCCESS,
 	payload: data
 });
-const getAdminFailure = (data) => ({
-	type: userConstants.GET_ADMIN_FAILURE,
+const isQuizPassedFailure = (data) => ({
+	type: userConstants.ISQUIZ_PASSED_FAILURE,
 	error: data
 });

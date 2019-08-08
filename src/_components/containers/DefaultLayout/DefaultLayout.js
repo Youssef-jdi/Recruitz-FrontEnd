@@ -15,7 +15,7 @@ import {
 	AppSidebarNav2 as AppSidebarNav
 } from '@coreui/react';
 // sidebar nav config
-import navigation from '../../../_utils/_nav';
+import { AdminNavigation, CandidateNavigation } from '../../../_utils/_nav';
 // routes config
 
 import Register from '../../../views/Register/Register';
@@ -26,43 +26,47 @@ import QuizPass from '../../../views/PassQuiz/QuizPass';
 import Candidates from '../../../views/Candidates/Candidate';
 import ResultQuiz from '../../../views/ResultQuiz/ResultQuiz';
 import AllQuizes from '../../../views/AllQuiz/AllQuizes';
+
 const DefaultFooter = React.lazy(() => import('./DefaultFooter'));
 const DefaultHeader = React.lazy(() => import('./DefaultHeader'));
 
 class DefaultLayout extends Component {
+	constructor(props) {
+		super(props);
+	}
 	loading = () => <div className="animated fadeIn pt-1 text-center">Loading...</div>;
 
 	signOut(e) {
 		e.preventDefault();
+		console.error('this.props ', this.props);
+		Auth.deauthenticateUser();
+		//this.props.history.push('/')
 	}
 
 	hideAppSideBarForCandidates = () => {
 		return Auth.getUser().role === 'Candidate' ? null : null;
 	};
 
-	checkUser = () => {
-		// const user = Auth.getUser();
-		// console.log('role ', user.role);
-		// if (user.role === 'Admin') {
-		// 	navigation.items[0].attributes = { disabled: true };
-		// 	console.log('routes ', navigation.items[0]);
-		// }
-		// if(user.role === 'Candidate'){
-		// 	 navigation.items[0].attributes = {disabled : true}
-		// 	// navigation.items[1].children[] = {disabled : true}
-		// 	// navigation.items[1].children.forEach(element => {
-		// 	// 	element.attributes = {disabled : true}
-		// 	// });
-		// 	navigation.items[1].children[0].attributes = {disabled : true}
-		// 	navigation.items[1].children[1].attributes = {disabled : true}
-		// }
+	componentDidMount() {
+		// this.isLoggedIn();
+	}
+
+	isLoggedIn = async () => {
+		if (!Auth.isUserAuthenticated()) await this.props.history.push('/');
 	};
 
 	render() {
+		let navigation;
+		Auth.isUserAuthenticated()
+			? Auth.getUser().role === 'Admin' || Auth.getUser().role === 'SuperAdmin'
+				? (navigation = AdminNavigation)
+				: (navigation = CandidateNavigation)
+			: this.props.history.push('/');
+		// Auth.getUser().role === 'Admin' || Auth.getUser().role === 'SuperAdmin'
+		// 	? (navigation = AdminNavigation)
+		// 	: (navigation = CandidateNavigation);
 		return (
 			<div className="app">
-				{this.checkUser()}
-
 				<AppHeader fixed>
 					<Suspense fallback={this.loading()}>
 						<DefaultHeader onLogout={(e) => this.signOut(e)} />

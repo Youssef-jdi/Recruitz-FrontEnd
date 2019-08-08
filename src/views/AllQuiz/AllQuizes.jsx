@@ -12,7 +12,7 @@ import {
 	InputGroupText
 } from 'reactstrap';
 import { getAllQuizes } from '../../_actions';
-import { getUser } from '../../_actions';
+
 import { connect } from 'react-redux';
 import RowAllQuizes from './AllQuizesRow';
 import { AssignQuizToUser } from '../../_actions';
@@ -100,7 +100,6 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = {
 	getAllQuizes,
-	getUser,
 	AssignQuizToUser
 };
 

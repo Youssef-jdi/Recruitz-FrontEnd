@@ -14,6 +14,7 @@ import {
 	InputGroupText,
 	Row
 } from 'reactstrap';
+import Auth from '../../_utils/Auth';
 
 class Register extends React.Component {
 	constructor(props) {
@@ -22,7 +23,7 @@ class Register extends React.Component {
 			user: {
 				name: '',
 				email: '',
-				role: 'Admin',
+				role: 'Candidate',
 				password: '00000000'
 			},
 			submitted: false
@@ -108,10 +109,11 @@ class Register extends React.Component {
 												value={user.role}
 												defaultValue="Admin"
 											>
-												<option defaultChecked value="Admin">
-													Admin
+												<option defaultChecked value="Candidate">
+													Candidate
 												</option>
-												<option value="Candidate">Candidate</option>
+												{Auth.getUser() ? (Auth.getUser().role === 'SuperAdmin' ? <option value="Admin">Admin</option> : null) : null}
+												
 											</Input>
 										</InputGroup>
 										{this.props.loading ? (

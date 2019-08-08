@@ -11,7 +11,7 @@ import UpdatePassword from './views/UpdatePassword/UpdatePassword'
 import Login from './views/Login/Login';
 import DefaultLayout from './_components/containers/DefaultLayout';
 import TokenNotValid from './views/UpdatePassword/TokenNotValid';
-import SurveyCreator from './views/SurveyCreator/SurveyCreator';
+
 const loading = () => <div className="animated fadeIn pt-3 text-center">Loading...</div>;
 
 class App extends Component {
