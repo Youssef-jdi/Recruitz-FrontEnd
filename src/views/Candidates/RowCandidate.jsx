@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button,Badge } from 'reactstrap';
-
+//see if candidate tried to cheat
 const RowCandidate = (props) => {
 	const candidate = props.candidate;
 	const valueBadge = candidate.quizToPass ? (candidate.resultQuiz ? 'Passed' : 'In Progress') : 'Not Assigned';
@@ -18,6 +18,7 @@ const RowCandidate = (props) => {
 			: props.history.push({ pathname: '/dashboard/allquizes', state: { candidate: candidate } });
 	};
 	
+	
 
 	return (
 		
@@ -31,6 +32,7 @@ const RowCandidate = (props) => {
 				<Button disabled={valueButton} onClick={() => execButton()}>
 					<i className={valueIcon} />
 				</Button>
+				{/* <a href="#" onClick={()=> execButton()} disabled >Hello</a> */}
 			</td>
 		</tr>
 			

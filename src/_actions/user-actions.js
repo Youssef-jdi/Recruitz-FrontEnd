@@ -86,6 +86,7 @@ export const isQuizPassed = (user) => {
 		Axios
 		.get(server+'/user/isQuizPassed/'+user.id)
 		.then(res => {
+			
 			dispatch(isQuizPassedSuccess(res.data))
 		})
 		.catch(err => {
@@ -105,6 +106,20 @@ export const startQuiz = (user) => {
 		})
 		.catch(err => {
 			dispatch(startQuizFailure(err.response.data))
+		})
+	}
+}
+
+export const reloadPage = (user) => {
+	return(dispatch) => {
+		dispatch(reloadPagePending())
+		Axios
+		.post(server+'/user/reload',user)
+		.then(res => {
+			dispatch(reloadPageSuccess(res.data))
+		})
+		.catch(err => {
+			dispatch(reloadPageFailure(err.response.data))
 		})
 	}
 }
@@ -197,3 +212,16 @@ const startQuizFailure = (data) => ({
 	type: userConstants.START_QUIZ_FAILURE,
 	error: data
 });
+
+const reloadPagePending = () => ({
+	type: userConstants.RELOAD_PAGE_PENDING
+});
+const reloadPageSuccess = (data) => ({
+	type: userConstants.RELOAD_PAGE_SUCCESS,
+	payload: data
+});
+const reloadPageFailure = (data) => ({
+	type: userConstants.RELOAD_PAGE_FAILURE,
+	error: data
+});
+

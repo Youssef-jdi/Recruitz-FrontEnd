@@ -125,6 +125,21 @@ export const deleteQuiz = (quiz) => {
 	};
 };
 
+export const checkStarted = (user) => {
+	return(dispatch) => {
+		dispatch(checkStartedPending())
+		Axios
+		.get(server+'/quiz/isStarted/'+user.id)
+		.then(res => {
+			console.error(res.data)
+			dispatch(checkStartedSuccess(res.data))
+		})
+		.catch(err => {
+			dispatch(checkStartedFailure(err.response.data))
+		})
+	}
+}
+
 const savePending = () => ({
 	type: quizConstants.SAVE_REQUEST
 });
@@ -234,5 +249,18 @@ const deleteQuizSuccess = (data) => ({
 
 const deleteQuizFailure = (data) => ({
 	type: quizConstants.DELETE_QUIZ_FAILURE,
+	error: data
+});
+const checkStartedPending = () => ({
+	type: quizConstants.CHECK_STARTED_REQUEST
+});
+
+const checkStartedSuccess = (data) => ({
+	type: quizConstants.CHECK_STARTED_SUCCESS,
+	payload: data
+});
+
+const checkStartedFailure = (data) => ({
+	type: quizConstants.CHECK_STARTED_FAILURE,
 	error: data
 });

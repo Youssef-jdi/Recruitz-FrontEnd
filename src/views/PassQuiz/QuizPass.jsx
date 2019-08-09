@@ -1,30 +1,30 @@
 import React, { Component } from 'react';
 import * as Survey from 'survey-react';
-import { finishQuiz, getQuizToPass, isQuizPassed, startQuiz } from '../../_actions';
+import { finishQuiz, getQuizToPass, isQuizPassed, startQuiz, checkStarted, reloadPage } from '../../_actions';
 import { connect } from 'react-redux';
 import Auth from '../../_utils/Auth';
 
 class QuizPass extends Component {
 	constructor(props) {
-		super(props)
-		if (window.performance) {
-			if (performance.navigation.type == 1) {
-			  //alert( "This page is reloaded" );
-			} else {
-			  //alert( "This page is not reloaded");
-			}
-		  }
+		super(props);
 	}
 	loading = () => <div className="animated fadeIn pt-1 text-center">Loading...</div>;
 	componentDidMount() {
 		Auth.getUser() ? this.props.isQuizPassed(Auth.getUser()) : console.log('');
 		Auth.getUser() ? this.props.getQuizToPass(Auth.getUser()) : console.log('');
-		//Auth.getUser() ? this.props.checkStarted(Auth.getUser()) : console.log('');
+		Auth.getUser() ? this.props.checkStarted(Auth.getUser()) : console.log('');
+		if (window.performance) {
+			if (performance.navigation.type == 1) {
+				//alert('This page is  reloaded');
+				Auth.getUser() ? this.props.reloadPage(Auth.getUser()) : console.log('');
+			} else {
+				//alert('This page is not reloaded');
+			}
+		}
 	}
 
 	render() {
-		
-		//this.props.getQuizToPass(Auth.getUser());
+		console.error('user ',this.props.user);
 		let model = new Survey.Model(this.props.quiz);
 		let render;
 		if (this.props.isPassed) {
@@ -35,14 +35,25 @@ class QuizPass extends Component {
 			if (this.props.success === 2) {
 				render = <div className="animated fadeIn pt-1 text-center">Loading...</div>;
 			} else if (this.props.success === 1) {
-				// if(this.props.isStarted){
-
+				if (this.props.started) {
+					render = <h1>You started the </h1>;
+					console.error('this user started the page')
+				}
+				// else if(this.props.user.reloadPage){
+				// 	render = <h1>You reloaded the page </h1>;
+				// 	console.error('this user reloaded the page')
 				// }
-				//save that user began the  survey
-				this.props.startQuiz(Auth.getUser());
-				render = (
-					<Survey.Survey model={model} onComplete={this.onComplete} onValueChanged={this.onValueChanged} />
-				);
+
+				 else {
+					this.props.startQuiz(Auth.getUser());
+					render = (
+						<Survey.Survey
+							model={model}
+							onComplete={this.onComplete}
+							onValueChanged={this.onValueChanged}
+						/>
+					);
+				}
 			} else {
 				render = <h1>You have no quiz</h1>;
 			}
@@ -65,14 +76,18 @@ const mapStateToProps = (state) => ({
 	success: state.passQuizReducer.success,
 	quiz: state.passQuizReducer.quiz,
 	successFinish: state.finishQuizReducer.success,
-	isPassed: state.isPassedReducer.isPassed
+	isPassed: state.isPassedReducer.isPassed,
+	started: state.checkStartedReducer.started,
+	user : state.isPassedReducer.user
 });
 
 const mapDispatchToProps = {
 	getQuizToPass,
 	finishQuiz,
 	isQuizPassed,
-	startQuiz
+	startQuiz,
+	checkStarted,
+	reloadPage
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(QuizPass);

@@ -14,6 +14,8 @@ import { getAdmin } from './getAdmin-reducer';
 import { AssignQuiz } from './AssignQuiz-reducer';
 import { deleteQuiz } from './deleteQuiz-reducer';
 import { isPassed } from './isQuizPassed-reducer'
+import { checkStarted } from './checkStarted-reducer'
+
 const rootReducer = combineReducers({
 	LoginRed: SignIn,
 	SignUpRed: registration,
@@ -29,7 +31,8 @@ const rootReducer = combineReducers({
 	getAdminReducer : getAdmin,
 	AssignQuizReducer : AssignQuiz,
 	deleteQuizReducer : deleteQuiz,
-	isPassedReducer : isPassed
+	isPassedReducer : isPassed,
+	checkStartedReducer : checkStarted
 });
 
 export default rootReducer;
