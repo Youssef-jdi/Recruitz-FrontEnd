@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Auth from '../../_utils/Auth';
 
 class Dashboard extends Component {
 	constructor(props) {

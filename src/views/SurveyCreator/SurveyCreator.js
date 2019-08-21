@@ -63,7 +63,8 @@ class SurveyCreator extends Component {
 		this.state = {
 			user: {},
 			open: false,
-			quiz: {}
+			quiz: {},
+			saved : false 
 		};
 	}
 
@@ -79,6 +80,7 @@ class SurveyCreator extends Component {
 		this.surveyCreator = new SurveyJSCreator.SurveyCreator('surveyCreatorContainer', options);
 		this.surveyCreator.saveSurveyFunc = this.saveMySurvey;
 		this.getConnectedUser();
+		console.log('success ',this.props.success)
 	}
 
 	getConnectedUser = () => {
@@ -87,7 +89,8 @@ class SurveyCreator extends Component {
 
 	render() {
 		let render ;
-		this.props.success ? render = <Redirect to="/dashboard/Quiz/listQuizes"/> : render = <div id="surveyCreatorContainer" />
+		
+		this.props.success && this.state.saved ? render = <Redirect to="/dashboard/Quiz/listQuizes"/> : render = <div id="surveyCreatorContainer" />
 		
 		return render;
 	}
@@ -95,6 +98,7 @@ class SurveyCreator extends Component {
 	saveMySurvey = () => {
 		console.log(this.surveyCreator.text);
 		this.props.save(JSON.parse(this.surveyCreator.text), this.state.user);
+		this.setState({saved : true})
 		// this.props.success ? this.props.history.push('/Dashboard/Candidates') : console.log('s')
 	};
 }

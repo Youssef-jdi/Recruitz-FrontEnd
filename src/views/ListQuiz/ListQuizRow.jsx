@@ -10,7 +10,7 @@ const ListQuizRow = (props) => {
 			<td>{quiz.date ? <Moment format="D MMM YYYY">{date}</Moment> : 'not specified'}</td>
 			<td>
 				{/* <Button style={{marginLeft: '40%'}} onClick={() => props.delete(quiz,props.index)}> */}
-					<i className="cui-trash icons font-xl d-block mt-1" style={{marginLeft : '43%' , cursor : 'pointer'}} onClick={() => props.delete(quiz,props.index)} />
+					<i className="cui-trash icons font-xl d-block mt-1" style={{marginLeft : '43%' , cursor : 'pointer'}} onClick={() => props.delete(quiz)} />
 				{/* </Button> */}
 			</td>
 		</tr>

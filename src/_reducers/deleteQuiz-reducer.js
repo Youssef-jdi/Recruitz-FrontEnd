@@ -1,8 +1,8 @@
 import { quizConstants } from '../_constants';
 
+
 const INITIAL_STATE = {
 	success: false,
-	id : 0
 };
 
 export const deleteQuiz = (state = INITIAL_STATE, action) => {
@@ -10,7 +10,7 @@ export const deleteQuiz = (state = INITIAL_STATE, action) => {
 		case quizConstants.DELETE_QUIZ_REQUEST:
 			return { ...state, success: false };
 		case quizConstants.DELETE_QUIZ_SUCCESS:
-			return { ...state, success: action.payload.success , id : action.id };
+			return { ...state, success: action.payload.success  };
 		case quizConstants.DELETE_QUIZ_FAILURE:
 			return { ...state, success: false };
 		default:

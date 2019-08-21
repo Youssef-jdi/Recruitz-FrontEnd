@@ -44,13 +44,12 @@ class ListQuiz extends Component {
 	};
 
 	render() {
-		let idDeleted = this.props.deletedQuiz;
-		console.error('successDeleting ',this.props.successDeleting)
+		// console.error('successDeleting ',this.props.successDeleting)
 		let filtredList = this.props.quizes.filter((quiz) => {
 			return quiz.title.indexOf(this.state.search) !== -1;
 		});
 
-		if (idDeleted != 0) filtredList = filtredList.filter((quiz) => quiz._id != idDeleted);
+		//if (idDeleted != 0) filtredList = filtredList.filter((quiz) => quiz._id != idDeleted);
 
 		return (
 			<div className="animated fadeIn">
@@ -107,7 +106,7 @@ const mapStateToProps = (state) => ({
 	success: state.getUserQuizReducer.success,
 	quizes: state.getUserQuizReducer.quizes,
 	successDeleting: state.deleteQuizReducer.success,
-	deletedQuiz: state.deleteQuizReducer.id
+	
 });
 
 const mapDispatchToProps = {

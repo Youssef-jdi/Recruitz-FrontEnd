@@ -1,7 +1,6 @@
 import server from '../_utils/server';
 import { Axios } from '../_utils/Axios';
 import { quizConstants } from '../_constants';
-import { cpus } from 'os';
 
 export const save = (quiz, user) => {
 	return (dispatch) => {
@@ -90,7 +89,7 @@ export const getAllQuizes = () => {
 						? (element.title = 'untitled')
 						: (element.title = element.title);
 				});
-				console.log(res.data);
+				
 				dispatch(getQuizesSuccess(res.data));
 			})
 			.catch((err) => {
@@ -102,7 +101,7 @@ export const getAllQuizes = () => {
 export const AssignQuizToUser = (quiz, user) => {
 	return (dispatch) => {
 		dispatch(AssignQuizToUserPending());
-		//let quiz = getState().redu.quiz
+		
 		Axios.post(server + '/quiz/assign', { user, quiz })
 			.then((res) => {
 				dispatch(AssignQuizToUserSuccess(res.data));
@@ -113,13 +112,24 @@ export const AssignQuizToUser = (quiz, user) => {
 	};
 };
 
-export const deleteQuiz = (quiz, id) => {
+export const deleteQuiz = (quiz) => {
 	return (dispatch) => {
 		dispatch(deleteQuizPending());
+		//let quiz = getState().redu.quiz
+		//let newquiz = quiz.filter((x)=>x.id !== quiz.id)
 		Axios.post(server + '/quiz/delete', { quiz })
 			.then((res) => {
-				console.error('onsuccess ',id)
-				dispatch(deleteQuizSuccess(res.data, id));
+
+				dispatch(deleteQuizSuccess(res.data));
+				res.data.quizes.forEach((element) => {
+					typeof element.title === 'undefined'
+						? (element.title = 'untitled')
+						: (element.title = element.title);
+				});
+				setTimeout(() => {
+					dispatch(getAllQuizesSuccess(res.data))
+				}, 1000);
+
 			})
 			.catch((err) => {
 				dispatch(deleteQuizFailure(err));
@@ -246,7 +256,7 @@ const deleteQuizPending = () => ({
 const deleteQuizSuccess = (data, id) => ({
 	type: quizConstants.DELETE_QUIZ_SUCCESS,
 	payload: data,
-	id : id
+	
 });
 
 const deleteQuizFailure = (data) => ({
