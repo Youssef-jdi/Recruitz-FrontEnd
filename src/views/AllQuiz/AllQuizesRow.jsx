@@ -14,9 +14,9 @@ const RowAllQuizes = (props) => {
 			<td>{quiz.date ? <Moment format="D MMM YYYY">{date}</Moment> : 'not specified'}</td>
 			<td>{quiz.madeBy.name}</td>
 			<td>
-				<Button onClick={() => props.assign(quiz,candidate)}>
-					<i className="cui-share icons font-l d-block mt-1" />
-				</Button>
+				{/* <Button > */}
+					<i className="cui-share icons font-l d-block mt-1" onClick={() => props.assign(quiz,candidate)} style={{cursor : 'pointer'}} />
+				{/* </Button> */}
 				{/* {props.success ? <Button style={{marginLeft:'20%'}} color="success" disabled><i className="cui-circle-check icons font-l d-block mt-1" /></Button> : <> </>} */}
 			</td>
 		</tr>

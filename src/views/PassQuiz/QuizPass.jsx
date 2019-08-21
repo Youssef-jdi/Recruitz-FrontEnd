@@ -4,10 +4,23 @@ import { finishQuiz, getQuizToPass, isQuizPassed, startQuiz, checkStarted, reloa
 import { connect } from 'react-redux';
 import Auth from '../../_utils/Auth';
 
+// var defaultThemeColorsEditor = Survey.StylesManager.ThemeColors['default'];
+// defaultThemeColorsEditor['$primary-color'] = '#20a8d8';
+// defaultThemeColorsEditor['$secondary-color'] = '#20a8d8';
+// defaultThemeColorsEditor['$primary-hover-color'] = '#20a8d8';
+// defaultThemeColorsEditor['$primary-text-color'] = '#20a8d8';
+// defaultThemeColorsEditor['$selection-border-color'] = '#20a8d8';
+// Survey.StylesManager.applyTheme('bootstrap');
+// Survey.defaultBootstrapCss.navigationButton = "btn btn-blue";
+// Survey.StylesManager.applyTheme('bootstrap');
+// Survey.defaultBootstrapCss.navigationButton = 'btn btn-green';
+Survey.defaultBootstrapCss.navigationButton = "btn btn-primary";
+Survey.Survey.cssType = "bootstrap";
 class QuizPass extends Component {
 	constructor(props) {
 		super(props);
 	}
+
 	loading = () => <div className="animated fadeIn pt-1 text-center">Loading...</div>;
 	componentDidMount() {
 		Auth.getUser() ? this.props.isQuizPassed(Auth.getUser()) : console.log('');
@@ -24,51 +37,58 @@ class QuizPass extends Component {
 	}
 
 	render() {
-		console.error('user ',this.props.user);
 		let model = new Survey.Model(this.props.quiz);
-		let render;
-		if (this.props.isPassed) {
-			render = <h1>You already passed the quiz </h1>;
-		} else if (this.props.successFinish) {
-			render = <h1>You finished</h1>;
-		} else {
-			if (this.props.success === 2) {
-				render = <div className="animated fadeIn pt-1 text-center">Loading...</div>;
-			} else if (this.props.success === 1) {
-				if (this.props.started) {
-					render = <h1>You started the </h1>;
-					console.error('this user started the page')
-				}
-				// else if(this.props.user.reloadPage){
-				// 	render = <h1>You reloaded the page </h1>;
-				// 	console.error('this user reloaded the page')
-				// }
+		console.error('model from server ', model);
+		let data;
+		var prevData = window.localStorage.getItem('survey'); //|| null;
 
-				 else {
-					this.props.startQuiz(Auth.getUser());
-					render = (
-						<Survey.Survey
-							model={model}
-							onComplete={this.onComplete}
-							onValueChanged={this.onValueChanged}
-						/>
-					);
-				}
-			} else {
-				render = <h1>You have no quiz</h1>;
+		if (prevData) {
+			data = JSON.parse(prevData);
+			model.data = data;
+			if (data.pageNo) {
+				model.currentPageNo = data.pageNo + 1;
 			}
+			if (data.QuizTimeSpent) {
+				model.timeSpent = data.QuizTimeSpent + 1;
+			}
+			console.log('current page ', model.currentPage);
+			// if(data.PageTimeSpent){
+			// 	model.currentPage.timeSpent = data.PageTimeSpent
+			// }
 		}
-
-		return <div>{render}</div>;
+		return (
+			<Survey.Survey
+				model={model}
+				onComplete={this.onComplete}
+				onValueChanged={this.onValueChanged}
+				onPartialSend={this.onPartialSend}
+			/>
+		);
 	}
 
 	onValueChanged = (result) => {
 		console.log('value changed!');
 	};
 
+	onPartialSend = (survey) => {
+		//console.error('time spent ', survey);
+		this.saveSurveyData(survey);
+	};
+
 	onComplete = (result) => {
-		console.log('Complete! ', result.data);
+		//console.log('Complete! ', result.data);
 		this.props.finishQuiz(Auth.getUser(), result.data);
+	};
+
+	saveSurveyData = (survey) => {
+		// console.error('time spent in survey', survey.timeSpent);
+		// console.error(' timeSpent in page', survey.currentPage.timeSpent);
+		// console.error('saved survey ', survey);
+		let data = survey.data;
+		data.pageNo = survey.currentPageNo;
+		data.QuizTimeSpent = survey.timeSpent;
+		data.PageTimeSpent = survey.currentPage.timeSpent;
+		window.localStorage.setItem('survey', JSON.stringify(data));
 	};
 }
 
@@ -78,7 +98,7 @@ const mapStateToProps = (state) => ({
 	successFinish: state.finishQuizReducer.success,
 	isPassed: state.isPassedReducer.isPassed,
 	started: state.checkStartedReducer.started,
-	user : state.isPassedReducer.user
+	user: state.isPassedReducer.user
 });
 
 const mapDispatchToProps = {

@@ -30,7 +30,7 @@ class ListQuiz extends Component {
 		};
 	}
 	componentDidMount() {
-	   Auth.getUser() ?	this.getQuizes() : this.props.history.push('/')
+		Auth.getUser() ? this.getQuizes() : this.props.history.push('/');
 	}
 
 	getQuizes = () => {
@@ -44,15 +44,17 @@ class ListQuiz extends Component {
 	};
 
 	render() {
+		let idDeleted = this.props.deletedQuiz;
+		console.error('successDeleting ',this.props.successDeleting)
 		let filtredList = this.props.quizes.filter((quiz) => {
 			return quiz.title.indexOf(this.state.search) !== -1;
 		});
 
+		if (idDeleted != 0) filtredList = filtredList.filter((quiz) => quiz._id != idDeleted);
+
 		return (
 			<div className="animated fadeIn">
 				<Row>
-					{console.log(this.props.successDeleting)}
-
 					<Col>
 						<Card>
 							<CardHeader>
@@ -75,17 +77,16 @@ class ListQuiz extends Component {
 										<tr>
 											<th>Title</th>
 											<th>Date registered</th>
-											<th>Action</th>
+											<th style={{textAlign : 'center'}}>Delete</th>
 										</tr>
 									</thead>
 									<tbody>
-										{/** Row */}
-										{/* {this.tabRow()} */}
 										{filtredList.map((quiz) => {
 											return (
 												<ListQuizRow
 													quiz={quiz}
 													key={quiz._id}
+													index={quiz._id}
 													search={this.state.search}
 													delete={this.props.deleteQuiz}
 												/>
@@ -105,7 +106,8 @@ class ListQuiz extends Component {
 const mapStateToProps = (state) => ({
 	success: state.getUserQuizReducer.success,
 	quizes: state.getUserQuizReducer.quizes,
-	successDeleting: state.deleteQuizReducer.success
+	successDeleting: state.deleteQuizReducer.success,
+	deletedQuiz: state.deleteQuizReducer.id
 });
 
 const mapDispatchToProps = {

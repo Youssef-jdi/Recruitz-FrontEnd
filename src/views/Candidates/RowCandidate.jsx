@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button,Badge } from 'reactstrap';
+import { Button, Badge } from 'reactstrap';
 //see if candidate tried to cheat
 const RowCandidate = (props) => {
 	const candidate = props.candidate;
@@ -10,18 +10,28 @@ const RowCandidate = (props) => {
 		: 'cui-envelope-closed icons font-l d-block mt-1';
 	let disabled;
 	const valueButton = candidate.quizToPass ? (candidate.resultQuiz ? null : (disabled = true)) : null;
-	const execButton = () => {
+	const execButton = (e) => {
 		candidate.quizToPass
 			? candidate.resultQuiz
 				? props.history.push({ pathname: '/dashboard/result', state: { candidate: candidate } })
-				: console.log('In Progress')
+				: e.preventDefault()
 			: props.history.push({ pathname: '/dashboard/allquizes', state: { candidate: candidate } });
 	};
-	
-	
+
+	const TextButton = candidate.quizToPass
+		? candidate.resultQuiz ? 'View Results' : 'Quiz in Progress'
+		: 'Assign Quiz';
+	const StyleButton = candidate.quizToPass
+		? candidate.resultQuiz
+			? null
+			: {
+				pointerEvents: 'none',
+				cursor: 'default',
+				color: 'black'
+			}
+		: null;
 
 	return (
-		
 		<tr>
 			<td>{candidate.name}</td>
 			<td>{candidate.email}</td>
@@ -29,14 +39,18 @@ const RowCandidate = (props) => {
 				<Badge color={colorBadge}>{valueBadge}</Badge>
 			</td>
 			<td>
-				<Button disabled={valueButton} onClick={() => execButton()}>
+				{/* <Button disabled={valueButton} onClick={(e) => execButton(e)}>
 					<i className={valueIcon} />
-				</Button>
-				{/* <a href="#" onClick={()=> execButton()} disabled >Hello</a> */}
+				</Button> */}
+				<a
+					href=""
+					style={StyleButton}
+					onClick={() => execButton()}
+				>
+					{TextButton}
+				</a>
 			</td>
 		</tr>
-			
-		
 	);
 };
 export default RowCandidate;

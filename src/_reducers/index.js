@@ -33,6 +33,8 @@ const rootReducer = combineReducers({
 	deleteQuizReducer : deleteQuiz,
 	isPassedReducer : isPassed,
 	checkStartedReducer : checkStarted
-});
+},
+window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+);
 
 export default rootReducer;

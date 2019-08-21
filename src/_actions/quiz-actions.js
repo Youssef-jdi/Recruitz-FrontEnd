@@ -102,6 +102,7 @@ export const getAllQuizes = () => {
 export const AssignQuizToUser = (quiz, user) => {
 	return (dispatch) => {
 		dispatch(AssignQuizToUserPending());
+		//let quiz = getState().redu.quiz
 		Axios.post(server + '/quiz/assign', { user, quiz })
 			.then((res) => {
 				dispatch(AssignQuizToUserSuccess(res.data));
@@ -112,12 +113,13 @@ export const AssignQuizToUser = (quiz, user) => {
 	};
 };
 
-export const deleteQuiz = (quiz) => {
+export const deleteQuiz = (quiz, id) => {
 	return (dispatch) => {
 		dispatch(deleteQuizPending());
 		Axios.post(server + '/quiz/delete', { quiz })
 			.then((res) => {
-				dispatch(deleteQuizSuccess(res.data));
+				console.error('onsuccess ',id)
+				dispatch(deleteQuizSuccess(res.data, id));
 			})
 			.catch((err) => {
 				dispatch(deleteQuizFailure(err));
@@ -126,19 +128,18 @@ export const deleteQuiz = (quiz) => {
 };
 
 export const checkStarted = (user) => {
-	return(dispatch) => {
-		dispatch(checkStartedPending())
-		Axios
-		.get(server+'/quiz/isStarted/'+user.id)
-		.then(res => {
-			console.error(res.data)
-			dispatch(checkStartedSuccess(res.data))
-		})
-		.catch(err => {
-			dispatch(checkStartedFailure(err.response.data))
-		})
-	}
-}
+	return (dispatch) => {
+		dispatch(checkStartedPending());
+		Axios.get(server + '/quiz/isStarted/' + user.id)
+			.then((res) => {
+				console.error(res.data);
+				dispatch(checkStartedSuccess(res.data));
+			})
+			.catch((err) => {
+				dispatch(checkStartedFailure(err.response.data));
+			});
+	};
+};
 
 const savePending = () => ({
 	type: quizConstants.SAVE_REQUEST
@@ -242,9 +243,10 @@ const deleteQuizPending = () => ({
 	type: quizConstants.DELETE_QUIZ_REQUEST
 });
 
-const deleteQuizSuccess = (data) => ({
+const deleteQuizSuccess = (data, id) => ({
 	type: quizConstants.DELETE_QUIZ_SUCCESS,
-	payload: data
+	payload: data,
+	id : id
 });
 
 const deleteQuizFailure = (data) => ({
