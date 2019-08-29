@@ -1,7 +1,7 @@
 import React, { Component, Suspense } from 'react';
 import * as router from 'react-router-dom';
 import { Container } from 'reactstrap';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, Link } from 'react-router-dom';
 import {
 	AppAside,
 	AppFooter,
@@ -27,6 +27,7 @@ import Candidates from '../../../views/Candidates/Candidate';
 import ResultQuiz from '../../../views/ResultQuiz/ResultQuiz';
 import AllQuizes from '../../../views/AllQuiz/AllQuizes';
 
+
 const DefaultFooter = React.lazy(() => import('./DefaultFooter'));
 const DefaultHeader = React.lazy(() => import('./DefaultHeader'));
 
@@ -36,12 +37,13 @@ class DefaultLayout extends Component {
 	}
 	loading = () => <div className="animated fadeIn pt-1 text-center">Loading...</div>;
 
-	signOut(e) {
+	signOut = async (e) => {
 		e.preventDefault();
 		console.error('this.props ', this.props);
-		Auth.deauthenticateUser();
-		//this.props.history.push('/')
-	}
+		await Auth.deauthenticateUser();
+		window.location.reload();
+		// this.props.history.push('/')
+	};
 
 	hideAppSideBarForCandidates = () => {
 		return Auth.getUser().role === 'Candidate' ? null : null;
@@ -62,14 +64,14 @@ class DefaultLayout extends Component {
 				? (navigation = AdminNavigation)
 				: (navigation = CandidateNavigation)
 			: this.props.history.push('/');
-		// Auth.getUser().role === 'Admin' || Auth.getUser().role === 'SuperAdmin'
-		// 	? (navigation = AdminNavigation)
-		// 	: (navigation = CandidateNavigation);
+	
 		return (
 			<div className="app">
 				<AppHeader fixed>
 					<Suspense fallback={this.loading()}>
-						<DefaultHeader onLogout={(e) => this.signOut(e)} />
+						<DefaultHeader onLogout={(e) => this.signOut(e)}>
+							{/* <Link to={'/'} /> */}
+						</DefaultHeader>
 					</Suspense>
 				</AppHeader>
 				<div className="app-body">

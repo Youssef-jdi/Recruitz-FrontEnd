@@ -39,6 +39,7 @@ class QuizPass extends Component {
 	render() {
 		let model = new Survey.Model(this.props.quiz);
 		console.error('model from server ', model);
+		console.log('successFinish ',this.props.successFinish)
 		let data;
 		var prevData = window.localStorage.getItem('survey'); //|| null;
 
@@ -51,10 +52,7 @@ class QuizPass extends Component {
 			if (data.QuizTimeSpent) {
 				model.timeSpent = data.QuizTimeSpent + 1;
 			}
-			console.log('current page ', model.currentPage);
-			// if(data.PageTimeSpent){
-			// 	model.currentPage.timeSpent = data.PageTimeSpent
-			// }
+		
 		}
 		return (
 			<Survey.Survey

@@ -46,15 +46,6 @@ widgets.ckeditor(SurveyKo);
 widgets.autocomplete(SurveyKo, $);
 widgets.bootstrapslider(SurveyKo);
 
-// const customOverlay = {
-// 	background: "rgba(36, 123, 160, 0.7)"
-// }
-
-// const customModal = {
-// 	background: "#b2dbbf",
-//     maxWidth: "500px",
-//     width: "100%"
-// }
 
 class SurveyCreator extends Component {
 	surveyCreator;
